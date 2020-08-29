@@ -1,5 +1,5 @@
 from models import LillicrapModel
-import tests
+import nn_fun.tests
 import util
 import numpy as np
 import time
@@ -14,16 +14,16 @@ if __name__ == '__main__':
     models = []
     losses = []
 
-    # run_args = tests.linear_target_Lillicrap(seed=seed)
-    # models += run_args[0]
-    # losses += util.run(*run_args)
+    run_args = nn_fun.tests.linear_target_Lillicrap(seed=seed)
+    models += run_args[0]
+    losses += util.run(*run_args)
     t_start = time.time()
 
-    run_args = tests.MNIST_basic(seed=seed)
-    # run_args = tests.linear_target_basic_GD_model_class_test(seed=seed)
-    models += run_args[0]
-    # losses += util.run(*run_args)
-    losses += util.run(*run_args, test=True)
+    # run_args = tests.MNIST_basic(seed=seed)
+    # # run_args = tests.linear_target_basic_GD_model_class_test(seed=seed)
+    # models += run_args[0]
+    # # losses += util.run(*run_args)
+    # losses += util.run(*run_args, test=True)
 
     t_end = time.time()
     print('Time elapsed during run(s) (training and testing): {}'.format(t_end - t_start))
