@@ -92,11 +92,6 @@ def linear_target_BCM(units=None, BCM_decay_rate=1.0, BCM_sat_const = 0.9, seed=
                           BCM_decay_rate=BCM_decay_rate, BCM_sat_const=BCM_sat_const)
     models.append(BCM_randFB)
 
-    # BCM DECAY RATE IS NOT AN AVERAGE, EXPONENTIAL DECAY CAN BUILD UP TO VALUES LARGER THAN
-    # TRUE ERROR AVERAGE, LEADING TO WEAK LEARNING,
-    # CORRELATIVE GRADIENTS ARE NOT REFERENCED TO TRUE MEAN OF LOSS, NOT VERY EFFECTIVE, TRY USING
-    # BATCH MEAN, ONGOING MEAN WITH NUMBER OF SAMPLES LIKE 1/ROOT(T) RATHER THAN EXPONENTIAL DECAY
-
     # runset hyperparameters
     n_samples = 2000
     batch_size = 1
@@ -151,11 +146,6 @@ def linear_target_BCM_pos_weights(units=None, BCM_decay_rate=1.0, BCM_sat_const 
                           BCM_decay_rate=BCM_decay_rate, BCM_sat_const=BCM_sat_const)
     models.append(BCM_randFB)
 
-    # BCM DECAY RATE IS NOT AN AVERAGE, EXPONENTIAL DECAY CAN BUILD UP TO VALUES LARGER THAN
-    # TRUE ERROR AVERAGE, LEADING TO WEAK LEARNING,
-    # CORRELATIVE GRADIENTS ARE NOT REFERENCED TO TRUE MEAN OF LOSS, NOT VERY EFFECTIVE, TRY USING
-    # BATCH MEAN, ONGOING MEAN WITH NUMBER OF SAMPLES LIKE 1/ROOT(T) RATHER THAN EXPONENTIAL DECAY
-
     # runset hyperparameters
     n_samples = 2000
     batch_size = 1
@@ -201,53 +191,6 @@ def MNIST_basic(in_size=None, units=None, seed=None):
                   weight_init_range=weight_init_range, bias_init_range=bias_init_range,
                   lr=0.001, decay_rate=1.0e-06, nonlins=['sigmoid', 'sigmoid'], loss="MSE",
                   normalization="NSE")
-
-    """
-    LOOK AT MNIST DARK PIXEL VALUES - floats varying between 0 and 1
-    WRITE SOMETHING TO DETERMINE WHAT PERCENTAGE OF SIGMOIDS ARE SATURATED
-    OR WHETHER THE GRADIENTS ARE VANISHING
-    CHECK WEIGHT/bias MAGNITUDES near beginning and ending of training
-    TRY SIGNIFICANTLY LARGER WEIGHT INITIALIZATION MAGNITUDES, increase UNTIL SATURATION
-    
-    test BP on trivial networks, 1 neuron layers, and then MNIST, find mistake in BP, 
-    also try hyperparameters from the tutorial, see if my results are significantly off from those
-    
-    VARY INITIALIZATION RANGES SYSTEMATICALLY
-    save weights to pickle file
-    """
-    # running on full train and test datasets with Lillicrap hyperparameters (batchsize 1, lr 0.001, weights/bias omega 0.01, decay rate 1.0e-06)
-    # generalizes terribly (max 1135/10000 correct after one epoch, 1/10000 after that),
-    # reaches min NSE on training set of ~0.001 (on some specific epochs) to ~0.15 asymptotically
-
-    # train_size 5000, test_size 1000, lr 0.01, batchsize 10, w/b init omega 0.175
-    # generalizes poorly, about same if not worse than above test, NSE reaches 0.1545 with 20 epochs
-
-    # train_size 5000, test_size 1000, lr 0.01, batchsize 10, w/b init omega 0.1
-    # generalizes poorly, about same if not worse than above test, NSE reaches 0.1545 with 20 epochs
-
-    # train_size 5000, test_size 1000, lr 0.1, batchsize 10, w/b init omega 0.1
-    # generalizes poorly, ~0.10 NSE with 10 epochs
-
-    # train_size 5000, test_size 1000, lr 0.1, batchsize 10, weight init omega 0.1, bias init omega 0.01
-    # generalizes poorly asymptotically, but gets 673/1000 after one epoch, ~0.13 NSE with 5 epochs
-
-    # train_size 5000, test_size 1000, lr 1, batchsize 10, weight init omega 0.1, bias init omega 0.01
-    # generalizes poorly asymptotically, ~0.5555 NSE constant with 5 epochs
-
-    # train_size 5000, test_size 1000, lr 1, batchsize 10, weight init omega 0.1, bias init omega 0.01, 30 hidden units
-    # generalizes poorly asymptotically, gets 809/1000, 0.21 NSE with one epoch, ~0.035 NSE with 20 epochs
-
-    # train_size 5000, test_size 1000, lr 3, batchsize 10, weight init omega 0.1, bias init omega 0.01, 30 hidden units
-    # generalizes poorly asymptotically, gets 856/1000, 0.13 NSE with one epoch, ~0.0018 NSE with 20 epochs
-
-    # train_size 50000, test_size 10000, lr 3, batchsize 10, weight init omega 0.1, bias init omega 0.01, 30 hidden units
-    # generalizes poorly asymptotically, gets 9332/10000, 0.07 NSE with one epoch, ~0.024 NSE with 20 epochs
-
-    # train_size 50000, test_size 10000, lr 3, batchsize 10, weight init omega 0.1, bias init omega 0.01, 30 hidden units, decay rate of 0 (all previous had 1.0e-06
-    # generalizes poorly asymptotically, gets 9360/10000, 0.064 NSE with one epoch, ~0.024 NSE with 20 epochs
-
-    # train_size 50000, test_size 10000, sampled data set in order of download, lr 3, batchsize 10, weight init omega 0.1, bias init omega 0.01, 30 hidden units, decay rate of 0 (all previous had 1.0e-06
-    # generalizes poorly asymptotically, gets 9251/10000, 0.11 NSE with one epoch, ~0.0191 NSE with 20 epochs
 
     models.append(model)
     X_train, y_train_idx, X_test, y_test_idx = util.load_mnist()
