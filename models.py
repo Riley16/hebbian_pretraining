@@ -322,11 +322,6 @@ class BCMModel(Model):
         e = np.expand_dims((y - y_hat).T, axis=1)
         return e, 0.5*np.dot(e.T, e)
 
-    # SIMPLE TEST WITH JUST BCM RULE FOR HIDDEN LAYER WEIGHTS WITH RANDOM FEEDBACK WEIGHTS,
-    # ORIGINALLY WAS CONSIDERING CONSTANT FEEDBACK WEIGHTS, BUT RANDOM FEEDBACK WEIGHTS SHOULD
-    # BE FINE AS WELL, POSSIBLY BETTER
-    # ALSO WANT TO TEST PERFORMANCE WITH RANDOM FEEDBACK ON OUTPUT WEIGHTS, SIMPLE TO IMPLEMENT
-    # WITH EXISTING RANDOM FEEDBACK WEIGHTS ALREADY BEING PRODUCED FOR ALL LAYERS
     def get_grad(self, e, x):
         grad_W = -e@np.expand_dims(self.activations[1].T, 0)
         if self.random_weights is True:
@@ -337,10 +332,6 @@ class BCMModel(Model):
             # post_syn_act[post_syn_act<0] = 0
             # post_syn_act = del_hidden + self.activations[1][:, np.newaxis]
             # del_hidden = self.weights[1].T @ e
-
-            # BASICALLY JUST AN APPLICATION OF MOMENTUM CONCEPT TO RANDOM FEEDBACK LEARNING RULE?
-            # MORE OF A REVERSE APPLICATION, WE SUBTRACT EXPONENTIAL MEAN AS BCM THRESHOLD,
-            # RATHER THAN USE IT IN UPDATE
 
             # BCM rule is applied to error signal input to neuron at distal apical dendritic compartment,
             # with the error signal in the GD framework corresponding to the gradient with respect to the activation
